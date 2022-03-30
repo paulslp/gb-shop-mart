@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.gb.gbshopmart.entity.Manufacturer;
+import ru.gb.gbshopmart.entity.Category;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-class ManufacturerControllerIntegTest {
+class CategoryControllerIntegTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -38,14 +38,14 @@ class ManufacturerControllerIntegTest {
 
     @Test
     @Order(1)
-    void testSaveManufacturerTest() throws Exception {
+    void testSaveCategoryTest() throws Exception {
 
-        mockMvc.perform(post("/api/v1/manufacturer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper
-                                .writeValueAsString(Manufacturer.builder()
-                                        .name("Tesla")
-                                        .build())))
+        mockMvc.perform(post("/api/v1/category")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper
+                        .writeValueAsString(Category.builder()
+                                .title("Smartphones")
+                                .build())))
                 .andExpect(status().isCreated());
     }
 
@@ -53,18 +53,18 @@ class ManufacturerControllerIntegTest {
     @Order(2)
     public void findAllTest() throws Exception {
 
-        mockMvc.perform(get("/api/v1/manufacturer"))
+        mockMvc.perform(get("/api/v1/category"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("id")))
                 .andExpect(jsonPath("$.[0].id").value("1"))
-                .andExpect(jsonPath("$.[0].name").value("Tesla"));
+                .andExpect(jsonPath("$.[0].title").value("Smartphones"));
     }
 
     @Test
     @Order(3)
     public void deleteByIdTest() throws Exception {
 
-        mockMvc.perform(delete("/api/v1/manufacturer/1"))
+        mockMvc.perform(delete("/api/v1/category/1"))
                 .andExpect(status().isNoContent());
     }
 }

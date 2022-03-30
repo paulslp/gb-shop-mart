@@ -11,18 +11,18 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -31,27 +31,23 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "MANUFACTURER")
+@Table(name = "CATEGORY")
 @EntityListeners(AuditingEntityListener.class)
-public class Manufacturer {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     protected Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
-    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.MERGE)
+    @ManyToMany
+    @JoinTable(name = "product_category",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> products;
-
-    public boolean addProduct(Product product) {
-        if (products == null) {
-            products = new HashSet<>();
-        }
-        return products.add(product);
-    }
 
     @Version
     @Column(name = "VERSION")
@@ -73,8 +69,7 @@ public class Manufacturer {
     public String toString() {
         return "Manufacturer{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", products=" + products +
+                ", title='" + title + '\'' +
                 '}';
     }
 }
