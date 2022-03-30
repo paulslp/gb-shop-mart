@@ -47,7 +47,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    protected Long id;
+    private Long id;
 
     @Column(name = "title")
     private String title;
