@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.gbapi.common.enums.Status;
 import ru.gb.gbapi.product.dto.ProductDto;
+import ru.gb.gbshopmart.dao.CategoryDao;
 import ru.gb.gbshopmart.dao.ManufacturerDao;
 import ru.gb.gbshopmart.dao.ProductDao;
 import ru.gb.gbshopmart.entity.Product;
 import ru.gb.gbshopmart.web.dto.mapper.ProductMapper;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductDao productDao;
     private final ManufacturerDao manufacturerDao;
+    private final CategoryDao categoryDao;
     private final ProductMapper productMapper;
 
     @Transactional(propagation = Propagation.NEVER, isolation = Isolation.DEFAULT)
@@ -54,7 +55,8 @@ public class ProductService {
 
 
     public List<ProductDto> findAll() {
-        return productDao.findAll().stream().map(productMapper::toProductDto).collect(Collectors.toList());
+        return productDao.findAll().stream().map(productMapper::toProductDto)
+                .collect(Collectors.toList());
     }
 
     public List<Product> findAllActive() {
