@@ -11,6 +11,7 @@ import ru.gb.gbshopmart.entity.Manufacturer;
 import ru.gb.gbshopmart.web.dto.mapper.ManufacturerMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,9 @@ public class ManufacturerService {
         return manufacturerMapper.toManufacturerDto(manufacturerDao.findById(id).orElse(null));
     }
 
+    public Optional<Manufacturer> findByName(String name) {
+        return manufacturerDao.findByName(name);
+    }
 
     public List<ManufacturerDto> findAll() {
         return manufacturerDao.findAll().stream().map(manufacturerMapper::toManufacturerDto).collect(Collectors.toList());

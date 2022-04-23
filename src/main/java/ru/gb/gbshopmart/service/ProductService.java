@@ -13,13 +13,17 @@ import ru.gb.gbapi.common.enums.Status;
 import ru.gb.gbapi.product.dto.ProductDto;
 import ru.gb.gbshopmart.dao.ManufacturerDao;
 import ru.gb.gbshopmart.dao.ProductDao;
+import ru.gb.gbshopmart.entity.Category;
 import ru.gb.gbshopmart.entity.Product;
 import ru.gb.gbshopmart.web.dto.mapper.ProductMapper;
 
-
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class ProductService {
     private final ProductDao productDao;
     private final ManufacturerDao manufacturerDao;
     private final ProductMapper productMapper;
+    private final CategoryService categoryService;
 
     @Transactional(propagation = Propagation.NEVER, isolation = Isolation.DEFAULT)
     public long count() {
@@ -37,7 +42,16 @@ public class ProductService {
 
     @Transactional
     public ProductDto save(final ProductDto productDto) {
+        if (isEmpty(productDto.getCategory())) {
+            throw new NoSuchElementException();
+        }
         Product product = productMapper.toProduct(productDto, manufacturerDao);
+
+        Set<Category> categories = categoryService.findByTitles(productDto.getCategory());
+        if (isEmpty(categories) || categories.size() != productDto.getCategory().size()) {
+            throw new NoSuchElementException();
+        }
+        product.setCategories(categories);
         if (product.getId() != null) {
             productDao.findById(productDto.getId()).ifPresent(
                     (p) -> product.setVersion(p.getVersion())
