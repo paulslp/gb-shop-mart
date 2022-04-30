@@ -1,20 +1,32 @@
 package ru.gb.gbexternalapi.rest;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.gb.gbapi.manufacturer.api.ManufacturerGateway;
 import ru.gb.gbapi.manufacturer.dto.ManufacturerDto;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/manufacturer")
 public class ManufacturerController {
 
     private final ManufacturerGateway manufacturerGateway;
+
+    public ManufacturerController(
+            @Qualifier("manufacturerIntGateway") ManufacturerGateway manufacturerGateway
+    ) {
+        this.manufacturerGateway = manufacturerGateway;
+    }
 
     @GetMapping
     List<ManufacturerDto> getManufacturerList() {
