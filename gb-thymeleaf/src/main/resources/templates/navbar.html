@@ -19,6 +19,14 @@
                     <a class="nav-link" th:classappend="${activeTab == 'ProductList' ? 'active' : ''}"
                        aria-current="page" th:href="@{/product/all}">Продукты</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'ManufacturerList' ? 'active' : ''}"
+                       aria-current="page" th:href="@{/manufacturer/all}">Производители</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'CategoryList' ? 'active' : ''}"
+                       aria-current="page" th:href="@{/category/all}">Категории</a>
+                </li>
             </ul>
         </div>
     </div>

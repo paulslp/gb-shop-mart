@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Список категорий</title>
+    <title>Список фабрик</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -11,45 +11,39 @@
 </head>
 <body>
 
+<div th:replace="~{navbar :: navi(CategoryList)}"/>
 <table>
     <tr>
         <td>
-            <a type="button" th:href="@{/product}" class="btn btn-warning">Добавить продукт</a>
+            <a type="button" th:href="@{/category}" class="btn btn-warning">Добавить категорию</a>
         </td>
     </tr>
     <tr>
         <td>
             <div class="container">
 
-                <span th:if="${products.size() == 0}">Товаров нет</span>
+                <span th:if="${categories.size() == 0}">Производителей нет</span>
 
-                <div th:unless="${products.size() == 0}">
+                <div th:unless="${categories.size() == 0}">
                     <table class="table">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Наименование</th>
-                            <th scope="col">Цена</th>
-                            <th scope="col">Редактировать</th>
-                            <th scope="col">Удалить</th>
-                            <th scope="col">Просмотр</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="product, i : ${products}"
-                            th:classappend="${product.status.name() == 'ACTIVE'} ? 'table-secondary' : 'table-danger'"
-                            th:attr="prod_index=${product.id}">
+                        <tr th:each="category, i : ${categories}"
+                            th:attr="category_index=${category.id}">
                             <th scope="row" th:text="${i.count}"></th>
-                            <td th:text="${product.title}"></td>
-                            <td th:text="${product.cost}"></td>
+                            <td th:text="${category.title}"></td>
                             <td>
-                                <a type="button" th:href="@{/product(id=${product.id})}" class="btn btn-warning">Редактировать</a>
+                                <a type="button" th:href="@{/category(id=${category.id})}"
+                                   class="btn btn-warning">Редактировать</a>
                             </td>
                             <td>
-                                <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>
-                            </td>
-                            <td>
-                                <a type="button" th:href="@{'/product/' + ${product.id} }" class="btn btn-warning">Просмотреть</a>
+                                <a type="button" th:href="@{/category/delete(id=${category.id})}"
+                                   class="btn btn-danger">Удалить</a>
                             </td>
                         </tr>
                         </tbody>

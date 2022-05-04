@@ -41,28 +41,24 @@
         <div class="col-md-8">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="manufacturer">Производитель</span>
-                <input type="text" class="form-control" aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-default" th:field="*{manufacturer}">
+                <select id="manufacturer" name="manufacturer" th:with="manufacturer=*{manufacturer}">
+                    <option th:each="manufacturerFromAllList : ${allManufactures}"
+                            th:value="${manufacturerFromAllList.name}"
+                            th:utext="${manufacturerFromAllList.name}"
+                            th:selected="${manufacturer.equals(manufacturerFromAllList.name)}"/>
+                </select>
             </div>
+
         </div>
         <div class="col-md-8">
             Категории
-            <ul class="list-group" th:field="*{categories}">
-                <li class="list-group-item" th:each="category : *{categories}"
-                    th:value="${category.id}"
-                    th:text="${category.title}">
-                </li>
-            </ul>
-            <!--            <table>-->
-            <!--                <tr th:each="category, itemStat : ${product.categories}">-->
-            <!--                    <td>-->
-            <!--                        <input hidden th:name="|categories[${itemStat.index}].id|" th:value="${category.getId()}"/>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                        <input th:name="|categories[${itemStat.index}].title|" th:value="${category.getTitle()}"/>-->
-            <!--                    </td>-->
-            <!--                </tr>-->
-            <!--            </table>-->
+            <select id="categoriesIdForAdding" name="categoriesIdForAdding"
+                    th:with="categoriesIdForAdding=*{categoriesIdForAdding}" multiple>
+                <option th:each="categoryFromAllList : ${allCategories}"
+                        th:value="${categoryFromAllList.id}"
+                        th:utext="${categoryFromAllList.title}"
+                        th:selected="${productCategoryIds.contains(categoryFromAllList.id)}"/>
+            </select>
         </div>
         <div class="col-md-8">
             <select class="form-select" aria-label="Default select example" th:field="*{status}">
