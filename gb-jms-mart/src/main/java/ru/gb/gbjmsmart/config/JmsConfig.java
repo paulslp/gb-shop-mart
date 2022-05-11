@@ -1,4 +1,4 @@
-package ru.gb.gbshopmart.config;
+package ru.gb.gbjmsmart.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

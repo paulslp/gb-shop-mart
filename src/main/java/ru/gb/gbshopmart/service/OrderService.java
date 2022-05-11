@@ -3,13 +3,13 @@ package ru.gb.gbshopmart.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.gbapi.events.OrderEvent;
 import ru.gb.gbapi.order.dto.OrderDto;
-import ru.gb.gbshopmart.config.JmsConfig;
 import ru.gb.gbshopmart.dao.CategoryDao;
 import ru.gb.gbshopmart.dao.ManufacturerDao;
 import ru.gb.gbshopmart.dao.OrderDao;
@@ -30,6 +30,10 @@ public class OrderService {
     private final CategoryDao categoryDao;
     private final JmsTemplate jmsTemplate;
 
+    @Value("${spring.artemis.embedded.queues}")
+    public String queue;
+
+
     @Transactional
     public OrderDto save(final OrderDto orderDto) {
         Order order = orderMapper.toOrder(orderDto, manufacturerDao, categoryDao);
@@ -37,11 +41,14 @@ public class OrderService {
             orderDao.findById(orderDto.getId()).ifPresent(
                     (p) -> order.setVersion(p.getVersion())
             );
-
         }
         OrderDto savedOrderDto = orderMapper.toOrderDto(orderDao.save(order));
 
-        jmsTemplate.convertAndSend(JmsConfig.ORDER_CHANGED_QUEUE, new OrderEvent(savedOrderDto));
+        try {
+            jmsTemplate.convertAndSend(queue, new OrderEvent(savedOrderDto));
+        } catch (RuntimeException e) {
+            log.error("Ошибка отправки сообщения", e);
+        }
 
         return savedOrderDto;
     }

@@ -1,7 +1,6 @@
 server:
-  port: 8082
-  servlet:
-    context-path: '/internal'
+  port: 8090
+
 spring:
   profiles:
     active: ${SPRING_PROFILES_INCLUDE:dev}
@@ -12,3 +11,16 @@ spring:
       label: ${SPRING_CLOUD_CONFIG_LABEL:lesson7_SelyutinPS}
       username: ${SPRING_CLOUD_CONFIG_USERNAME:geek_user}
       password: ${SPRING_CLOUD_CONFIG_PASSWORD:geek_pass}
+  mail:
+    host: 'smtp.gmail.com'
+    port: 587
+    username: 'kropotov.geek'
+    password: 'kropotov.pass.1234'
+    properties:
+      mail:
+        smtp:
+          auth: 'true'
+          starttls:
+            enable: 'true'
+          ssl:
+            trust: 'smtp.gmail.com'
