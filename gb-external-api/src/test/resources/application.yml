@@ -20,3 +20,7 @@ gb.api:
     period: 3000 # Millis
     maxPeriod: 5000 # Millis
     maxAttempts: 3
+jwt:
+  token:
+    expired: 86_400_000
+    secret: 'jwtsecret'
