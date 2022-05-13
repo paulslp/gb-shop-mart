@@ -7,6 +7,7 @@ spring:
   datasource:
     hikari:
       driver-class-name: 'org.h2.Driver'
+    driver-class-name: 'org.h2.Driver'
 gb.api:
   endpoint:
     manufacturer-internal-url: 'stub'
